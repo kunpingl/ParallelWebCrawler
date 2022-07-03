@@ -48,9 +48,7 @@ public class CrawlerRecursiveAction extends RecursiveAction {
     for (Pattern pattern : ignoredUrls) {
       if (pattern.matcher(url).matches()) return;
     }
-
-    if (visitedUrls.contains(url)) return;
-    visitedUrls.add(url);
+    if (!visitedUrls.add(url)) return;
 
     PageParser.Result result = parserFactory.get(url).parse();
     for (ConcurrentMap.Entry<String, Integer> e : result.getWordCounts().entrySet()) {

@@ -10,29 +10,54 @@ Q1. Run the web crawler using the configurations located at src/main/config/writ
     the ParallelWebCrawler.
 
     Why did the parser take more time when run with ParallelWebCrawler?
-
+    Note that for the given time period, the parallel crawler will access and parse more urls than the legacy crawler.
+    So the parser takes more time when run with ParallelWebCrawler.
 
 Q2. Your manager ran your crawler on her old personal computer, using the configurations from Q1, and she notices that
     the sequential crawler actually outperforms the parallel crawler. She would like to know why.
 
     (a) Suggest one reason why the sequential web crawler was able to read more web pages than the parallel crawler.
         (Hint: Try setting "parallelism" to 1 in the JSON configs to simulate your manager's computer.)
+        Even if I set parallelism to 1, the custom class CrawlerRecursiveAction still run the logic of adding subtasks.
+        However, the sequential web crawler does not need to do this.
 
     (b) Suggest one scenario in which the parallel web crawler will almost certainly perform better than the sequential
         crawler. Why will it perform better?
+        If we have a super computer that can support huge threads, we can run parallel web crawler
+        that outplays the sequential crawler. The reason this scenario is working is that, parallel crawler make the use
+        of multiple threads and sequential one only uses one thread.
 
 
 Q3. Analyze your method profiler through the lens of Aspect Oriented Programming, by answering the following questions:
 
     (a) What cross-cutting concern is being addressed by the com.udacity.webcrawler.profiler.Profiler class?
+    The Profiler class solve the concern of comparing the time-cost improvement between two crawlers.
 
     (b) What are the join points of the Profiler in the web crawler program?
-
+    1. com.udacity.webcrawler.WebCrawler.crawl
+    2. com.udacity.webcrawler.parser.PageParser.parse
 
 Q4. Identify three (3) different design patterns used in this project, and explain which interfaces, classes, and/or
     libraries use or implement those design patterns.
 
     For each pattern, name one thing about the pattern that you LIKED, and one thing you DISLIKED. If you did not like
     anything, you can name two things you disliked.
+
+    1. Dependency Injection:
+    Guice.createInjector(new WebCrawlerModule(config), new ProfilerModule()).injectMembers(this);
+    We inject WebCrawlerModule and ProfilerModule by Guice.
+    Liked: make the code more readable and benefits for unit-testing
+    Disliked: Learning Guice takes time
+
+    2. Builder Pattern:
+    The builder in com.udacity.webcrawler.json.ConfigurationLoader
+    Liked: builder can hold the state of fields and make the construction more flexible
+    Disliked: extra implements for Builder class is needed
+
+    3. Strategy Pattern:
+    The interface WebCrawler is implemented by two different type of crawlers: Sequential and parallel
+    Liked: interface WebCrawler represents the same kind of task -> crawl web, which improve the readability and structure
+    Disliked: if we design the code from the blank, we really need to think about it deeply
+
 
 

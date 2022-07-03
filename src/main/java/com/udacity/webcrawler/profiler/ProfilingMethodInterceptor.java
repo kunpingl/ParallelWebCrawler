@@ -39,8 +39,7 @@ final class ProfilingMethodInterceptor implements InvocationHandler {
       throw ite.getTargetException();
     } finally {
       if (isProfiled) {
-        Duration duration = Duration.between(start, clock.instant());
-        state.record(this.delegate.getClass(), method, duration);
+        state.record(this.delegate.getClass(), method, Duration.between(start, clock.instant()));
       }
     }
 

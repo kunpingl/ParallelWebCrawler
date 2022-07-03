@@ -1,4 +1,4 @@
-package com.udacity.webcrawler.profiler;
+package com.udacity.webcrawler;
 
 import com.udacity.webcrawler.parser.PageParser;
 import com.udacity.webcrawler.parser.PageParserFactory;

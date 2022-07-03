@@ -31,16 +31,19 @@ public final class WebCrawlerMain {
   @Inject
   private Profiler profiler;
 
-  private void run() throws Exception {
+  private void run() {
     Guice.createInjector(new WebCrawlerModule(config), new ProfilerModule()).injectMembers(this);
 
     CrawlResult result = crawler.crawl(config.getStartPages());
     CrawlResultWriter resultWriter = new CrawlResultWriter(result);
-    // TODO: Write the crawl results to a JSON file (or System.out if the file name is empty)
+
+    // write the crawl results to a JSON file to the result path (or System.out if the file name is empty)
+    if (!config.getResultPath().isEmpty()) resultWriter.write(Path.of(config.getResultPath()));
+    else resultWriter.write(new OutputStreamWriter(System.out));
     // TODO: Write the profile data to a text file (or System.out if the file name is empty)
   }
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     if (args.length != 1) {
       System.out.println("Usage: WebCrawlerMain [starting-url]");
       return;
